@@ -37,11 +37,15 @@ post '/visit' do
         :datetime   => 'Не правильная дата визита'
     };
 
+    @error = '';
+
     errPattern.each do |key, value|
         if params[key] == ''
-            @error = value
+            @error += "#{value}<p>"
         end
     end;
+
+    puts @error
 
     if @error != '' 
         return erb(:visit)
