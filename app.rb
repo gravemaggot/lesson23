@@ -30,6 +30,11 @@ post '/visit' do
     @title     = 'Thanks you!'
     @message   = "Dear #{@user_name}, we'll be waiting for you at #{@date_time}. Master: #{@master}. Color: #{@color}"
 
+    if @user_name == ''
+        @error = 'Введите имя';
+        return erb(:visit)
+    end
+
 	f = File.open('./public/users.txt', 'a')
     f.write("User: #{@user_name}, Phone: #{@phone}, Date and Time: #{@date_time}, Master: #{@master}, Color: #{@color}\n")
     f.close()
