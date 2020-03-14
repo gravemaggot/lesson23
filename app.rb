@@ -21,24 +21,38 @@ end
 
 post '/visit' do
 
-    @user_name = params[:username]
-    @phone     = params[:phone]
-	@date_time = params[:datetime]
-    @master    = params[:master]
-    @color     = params[:color]
+    @username  = params[:username];
+    @phone     = params[:phone];
+	@datetime  = params[:datetime];
+    @master    = params[:master];
+    @color     = params[:color];
 
-    @title     = 'Thanks you!'
-    @message   = "Dear #{@user_name}, we'll be waiting for you at #{@date_time}. Master: #{@master}. Color: #{@color}"
+    @title     = 'Thanks you!';
+    @message   = "Dear #{@user_name}, we'll be waiting for you at #{@date_time}. Master: #{@master}. Color: #{@color}";
 
-    if @user_name == ''
-        @error = 'Введите имя';
+    # Проверка заполнения
+    errPattern = {
+        :username   => 'Введите имя',
+        :phone      => 'Укажите телефон',
+        :datetime   => 'Не правильная дата визита'
+    };
+
+    errPattern.each do |key, value|
+        if params[key] == ''
+            @error = value
+        end
+    end;
+
+    if @error != '' 
         return erb(:visit)
-    end
+    end;
 
-	f = File.open('./public/users.txt', 'a')
-    f.write("User: #{@user_name}, Phone: #{@phone}, Date and Time: #{@date_time}, Master: #{@master}, Color: #{@color}\n")
-    f.close()
+    # Запись в файл
+	f = File.open('./public/users.txt', 'a');
+    f.write("User: #{@username}, Phone: #{@phone}, Date and Time: #{@datetime}, Master: #{@master}, Color: #{@color}\n");
+    f.close();
 
+    # Вывод сообщения об ошибке
     erb(:message)
 
 end
